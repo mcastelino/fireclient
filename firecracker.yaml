@@ -4,7 +4,7 @@ info:
   description: RESTful public-facing API.
                The API is accessible through HTTP calls on specific URLs carrying JSON modeled data.
                The transport medium is a Unix Domain Socket.
-  version: 0.11.0
+  version: 0.10.1
   termsOfService: ""
   contact:
     email: "compute-capsule@amazon.com"
@@ -79,6 +79,39 @@ paths:
           description: Boot source created/updated
         400:
           description: Boot source cannot be created due to bad input
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /vsocks/{id}:
+    put:
+      summary: Creates new vsock with ID specified by the id parameter.
+      description:
+        If the vsock device with the specified ID already exists, its body will
+        be updated based on the new input. May fail if update is not possible.
+      operationId: putGuestVsockByID
+      parameters:
+      - name: id
+        in: path
+        description: The id of the vsock device
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: Guest vsock properties
+        required: true
+        schema:
+          $ref: "#/definitions/Vsock"
+      responses:
+        201:
+          description: Vsock created
+        204:
+          description: Vsock updated
+        400:
+          description: Vsock cannot be created due to bad input
           schema:
             $ref: "#/definitions/Error"
         default:
@@ -224,8 +257,10 @@ paths:
           schema:
             type: object
       responses:
+        201:
+          description: MMDS data store created
         204:
-          description: MMDS data store created/updated.
+          description: MMDS data store updated.
         400:
           description: MMDS data store cannot be created due to bad input.
           schema:
@@ -360,7 +395,7 @@ definitions:
 
   Error:
     properties:
-      faultMessage:
+      fault_message:
         type: string
         description: A description of the error condition
 
@@ -517,3 +552,15 @@ definitions:
         format: int64
         description: The amount of milliseconds it takes for the bucket to refill.
         minimum: 0
+
+  Vsock:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+      guest_cid:
+        type: integer
+        minimum: 3
+        description: Guest Vsock CID
