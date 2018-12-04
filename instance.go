@@ -89,7 +89,7 @@ func main() {
 	*/
 	{
 		kernel := "./vmlinux"
-		cmdLine := "console=ttyS0 reboot=k panic=1 pci=off"
+		cmdLine := "console=ttyS0 reboot=k panic=1 pci=off init=/bin/ash"
 		bootSrcParams := ops.NewPutGuestBootSourceParams()
 		src := &models.BootSource{
 			KernelImagePath: &kernel,
@@ -119,7 +119,7 @@ func main() {
 	*/
 	{
 		driveID := "rootfs"
-		hostPath := "./hello-rootfs.ext4"
+		hostPath := "./kata.img"
 		driveParams := ops.NewPutGuestDriveByIDParams()
 		driveParams.SetDriveID(driveID)
 		isReadOnly := false
