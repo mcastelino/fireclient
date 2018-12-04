@@ -138,6 +138,25 @@ func main() {
 		}
 	}
 
+	{
+		cfg := ops.NewPutGuestNetworkInterfaceByIDParams()
+		ifaceID := "tap0"
+		ifaceCfg := &models.NetworkInterface{
+			AllowMmdsRequests: false,
+			GuestMac:          "02:ca:fe:ca:fe:01",
+			IfaceID:           &ifaceID,
+			HostDevName:       "tap0",
+			State:             "Attached",
+		}
+		cfg.SetBody(ifaceCfg)
+		cfg.SetIfaceID(ifaceID)
+		_, err := fireClient.Operations.PutGuestNetworkInterfaceByID(cfg)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(2)
+		}
+	}
+
 	/*
 		curl --unix-socket /tmp/firecracker.sock -i \
 		     -X PUT "http://localhost/vsocks/root" \
