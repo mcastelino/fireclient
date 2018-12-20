@@ -233,9 +233,9 @@ func main() {
 	time.Sleep(5000 * time.Millisecond)
 	getInstanceState(fireClient)
 
+	driveID := "hotDummy"
 	/* Now update the driver to point to a new one and rescan */
 	{
-		driveID := "hotDummy"
 		hostPath := "./real.img"
 		driveParams := ops.NewPatchGuestDriveByIDParams()
 		driveParams.SetDriveID(driveID)
@@ -255,7 +255,7 @@ func main() {
 		actionParams := ops.NewCreateSyncActionParams()
 		actionInfo := &models.InstanceActionInfo{
 			ActionType: "BlockDeviceRescan",
-			//Payload:    "",
+			Payload:    driveID,
 		}
 		actionParams.SetInfo(actionInfo)
 		_, err := fireClient.Operations.CreateSyncAction(actionParams)
