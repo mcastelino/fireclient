@@ -156,6 +156,20 @@ func main() {
 		}
 	}
 
+	{
+		param := ops.NewPutMachineConfigurationParams()
+		cfg := &models.MachineConfiguration{
+			MemSizeMib: 512,
+			VcpuCount:  4,
+		}
+		param.SetBody(cfg)
+		_, err := fireClient.Operations.PutMachineConfiguration(param)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(2)
+		}
+	}
+
 	/*
 		curl --unix-socket /tmp/firecracker.sock -i \
 		     -X PUT "http://localhost/vsocks/root" \
