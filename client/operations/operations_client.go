@@ -113,7 +113,7 @@ func (a *Client) PatchMmds(params *PatchMmdsParams) (*PatchMmdsNoContent, error)
 /*
 PutMmds creates a m m d s microvm metadata service data store
 */
-func (a *Client) PutMmds(params *PutMmdsParams) (*PutMmdsCreated, *PutMmdsNoContent, error) {
+func (a *Client) PutMmds(params *PutMmdsParams) (*PutMmdsNoContent, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewPutMmdsParams()
@@ -132,15 +132,9 @@ func (a *Client) PutMmds(params *PutMmdsParams) (*PutMmdsCreated, *PutMmdsNoCont
 		Client:             params.HTTPClient,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	switch value := result.(type) {
-	case *PutMmdsCreated:
-		return value, nil, nil
-	case *PutMmdsNoContent:
-		return nil, value, nil
-	}
-	return nil, nil, nil
+	return result.(*PutMmdsNoContent), nil
 
 }
 
@@ -231,6 +225,36 @@ func (a *Client) PatchGuestDriveByID(params *PatchGuestDriveByIDParams) (*PatchG
 }
 
 /*
+PatchGuestNetworkInterfaceByID updates the rate limiters applied to a network interface
+
+Updates the rate limiters applied to a network interface.
+*/
+func (a *Client) PatchGuestNetworkInterfaceByID(params *PatchGuestNetworkInterfaceByIDParams) (*PatchGuestNetworkInterfaceByIDNoContent, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewPatchGuestNetworkInterfaceByIDParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "patchGuestNetworkInterfaceByID",
+		Method:             "PATCH",
+		PathPattern:        "/network-interfaces/{iface_id}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &PatchGuestNetworkInterfaceByIDReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*PatchGuestNetworkInterfaceByIDNoContent), nil
+
+}
+
+/*
 PutGuestBootSource creates or updates the boot source
 
 Creates new boot source if one does not already exist, otherwise updates it. Will fail if update is not possible. Note that the only currently supported boot source is LocalImage.
@@ -293,7 +317,7 @@ func (a *Client) PutGuestDriveByID(params *PutGuestDriveByIDParams) (*PutGuestDr
 /*
 PutGuestNetworkInterfaceByID creates a network interface
 
-Creates new network interface with ID specified by iface_id path parameter. Updating existing interfaces is currently not allowed.
+Creates new network interface with ID specified by iface_id path parameter.
 */
 func (a *Client) PutGuestNetworkInterfaceByID(params *PutGuestNetworkInterfaceByIDParams) (*PutGuestNetworkInterfaceByIDNoContent, error) {
 	// TODO: Validate the params before sending

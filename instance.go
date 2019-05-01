@@ -145,8 +145,7 @@ func main() {
 			AllowMmdsRequests: false,
 			GuestMac:          "02:ca:fe:ca:fe:01",
 			IfaceID:           &ifaceID,
-			HostDevName:       "tap0",
-			State:             "Attached",
+			HostDevName:       &ifaceID,
 		}
 		cfg.SetBody(ifaceCfg)
 		cfg.SetIfaceID(ifaceID)

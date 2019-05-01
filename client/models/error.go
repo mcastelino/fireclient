@@ -16,6 +16,7 @@ import (
 type Error struct {
 
 	// A description of the error condition
+	// Read Only: true
 	FaultMessage string `json:"fault_message,omitempty"`
 }
 
