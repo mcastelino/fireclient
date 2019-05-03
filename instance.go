@@ -89,7 +89,7 @@ func main() {
 	*/
 	{
 		kernel := "./vmlinux"
-		cmdLine := "console=ttyS0 reboot=k panic=1 pci=off init=/bin/ash"
+		cmdLine := "init=/usr/lib/systemd/systemd systemd.unit=kata-containers.target systemd.mask=systemd-networkd.service systemd.mask=systemd-networkd.socket systemd.mask=systemd-journald.service systemd.mask=systemd-journald.socket systemd.mask=systemd-journal-flush.service systemd.mask=systemd-udevd.service systemd.mask=systemd-udevd.socket systemd.mask=systemd-udev-trigger.service systemd.mask=systemd-timesyncd.service systemd.mask=systemd-update-utmp.service systemd.mask=systemd-tmpfiles-setup.service systemd.mask=systemd-tmpfiles-cleanup.service systemd.mask=systemd-tmpfiles-cleanup.timer systemd.mask=tmp.mount systemd.mask=systemd-random-seed.service agent.log=debug console=ttyS0 reboot=k panic=1 pci=off root=/dev/vda1 random.trust_cpu=on"
 		bootSrcParams := ops.NewPutGuestBootSourceParams()
 		src := &models.BootSource{
 			KernelImagePath: &kernel,
@@ -123,7 +123,7 @@ func main() {
 		driveParams := ops.NewPutGuestDriveByIDParams()
 		driveParams.SetDriveID(driveID)
 		isReadOnly := false
-		isRootDevice := true
+		isRootDevice := false
 		drive := &models.Drive{
 			DriveID:      &driveID,
 			IsReadOnly:   &isReadOnly,
